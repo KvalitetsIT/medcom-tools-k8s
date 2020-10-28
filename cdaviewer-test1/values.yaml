@@ -1,0 +1,371 @@
+service:
+  fullnameOverride: cdaviewer-test1
+  namespace: medcomtools
+  replicaCount: 1
+
+  image:
+    repository: kvalitetsit/cdadocumentviewer-webgui
+    tag: "a6f83ef7ccb90d8e29222687e798ae19cf5969dd"
+    # skal opgraderes til c5124ee5a6c9123a75b55258a5d46b900312d8ae, og samtidig fjernes voces properties, gøres efter det virker som for nsptest
+  imagePullSecrets:
+    - name: kit4medcom
+
+  serviceAccount:
+    create: false
+  initContainers:
+    keystorebuilder:
+      image:
+        repository: "openjdk"
+        tag: "11-jre-slim"
+      commands:
+          - bash
+          - "-c"
+          - "openssl pkcs12 -export -in /input/voces.crt -inkey /input/voces.key -name sosi:alias_system -out my.p12 -password pass:Test1234; keytool -importkeystore -srckeystore my.p12 -srcstoretype pkcs12 -srcalias sosi:alias_system -srcstorepass Test1234 -destkeystore /output/voces.jks -deststoretype jks -deststorepass Test1234 -destalias sosi:alias_system; openssl pkcs12 -export -in /input/moces.crt -inkey /input/moces.key -name sosi:alias_system -out mymoces.p12 -password pass:Test1234; keytool -importkeystore -srckeystore mymoces.p12 -srcstoretype pkcs12 -srcalias sosi:alias_system -srcstorepass Test1234 -destkeystore /output/moces.jks -deststoretype jks -deststorepass Test1234 -destalias sosi:alias_system"
+      configMapMountPaths:
+        voces.key:
+            configMapMountPath: /input/voces.key
+            configMapMountSubPath: voces.key
+        voces.crt:
+            configMapMountPath: /input/voces.crt
+            configMapMountSubPath: voces.crt
+        moces.key:
+          configMapMountPath: /input/moces.key
+          configMapMountSubPath: moces.key
+        moces.crt:
+          configMapMountPath: /input/moces.crt
+          configMapMountSubPath: moces.crt
+      extraVolumeMounts:
+        keystore-dir:
+          mountPath: /output
+  deployment:
+    containerPort: 8080
+    env: 
+      JVM_OPTS:
+        value: "-Xms64m -Xmx512m"
+      SPRING_REDIS_PORT:
+        value: "8080"
+      SPRING_REDIS_HOST:
+        value: "redis"
+
+      SPRING_SERVLET_MULTIPART_MAX:
+        value: "-1"
+      CONTEXT:
+        value: "cdaviewer-test1"
+
+    # Den gode webservice
+      STS_URL:
+        value: "http://test1.ekstern-test.nspop.dk:8080/sts/services/NewSecurityTokenService"
+      KEYSTORE_FILENAME:
+        value: "file:config/keystores/voces.jks"
+        #value: "file:VOCES_gyldig_2022.p12"
+      KEYSTORE_ALIAS:
+        value: "sosi:alias_system"
+        #value: "nets danid a/s - tu voces gyldig"
+      KEYSTORE_PASSWORD:
+        value: "Test1234"
+      DGWS_CERTIFICATE_CVR:
+        value: "30808460"
+      DGWS_CERTIFICATE_ORGNAME:
+        value: "NETS DANID A/S"
+      DGWS_CERTIFICATE_ITSYSTEM:
+        value: "TRUST2408 Systemtest XIX CA"
+
+      # HSUID header
+      HSUID_USER_TYPE:
+        value: "nsi:HealthcareProfessional"
+      HSUID_USER_CPR:
+        value: "0101584160"
+      HSUID_USER_AUTHORIZATION_CODE:
+        value: "SRTTQ"
+      HSUID_SOR_CODE:
+        value: "293591000016003"
+      HSUID_SYSTEM_OWNER:
+        value: "system owner"
+      HSUID_SYSTEM_NAME:
+        value: "MedComCDAViewer"
+      HSUID_SYSTEM_VERSION:
+        value: "1.0"
+      HSUID_ORG_NAME:
+        value: "MyOrganisation"
+      HSUID_ISSUER:
+        value: "CDA"
+
+      MOCES_KEYSTORE_ALIAS:
+        value: "sosi:alias_system"
+        #value: "casper rasmussen"
+      MOCES_KEYSTORE_FILENAME:
+        value: "file:config/keystores/moces.jks"
+        #value: "file:moces.jks"
+      MOCES_KEYSTORE_PASSWORD:
+        value: "Test1234"
+      MOCES_CERTIFICATE_ORGNAME:
+        value: "LAKESIDE A/S"
+      MOCES_CERTIFICATE_CVR:
+        value: "25450442"
+      MOCES_HSUID_USER_TYPE:
+        value: "nsi:HealthcareProfessional"
+      MOCES_HSUID_USER_CPR:
+        value: "0804569723"
+      MOCES_HSUID_SOR_CODE:
+        value: "293591000016003"
+      MOCES_HSUID_SYSTEM_OWNER:
+        value: "Lakeside"
+      MOCES_HSUID_SYSTEM_NAME:
+        value: "CDAViewer"
+      MOCES_HSUID_SYSTEM_VERSION:
+        value: "1.0"
+      MOCES_HSUID_ORG_NAME:
+        value: "MyOrganisation"
+      MOCES_HSUID_ISSUER:
+        value: "CDAViewer"
+      MOCES_HSUID_USER_AUTHORIZATION_CODE:
+        value: "CBNH1"
+      MOCES_HSUID_FIRSTNAME:
+        value: "Casper"
+      MOCES_HSUID_LASTNAME:
+        value: "Rasmussen"
+
+      #table values for dropdownlists and other reference data
+      TYPE_CODE_SCHEME:
+        value: "2.16.840.1.113883.6.1"
+      FORMAT_CODE_SCHEME:
+        value: "1.2.208.184.100.10"
+      EVENT_CODE_SCHEME:
+        value: "1.2.208.176.2.1"
+      HEALTHCAREFACILITYTYPE_CODE_SCHEME:
+        value: "2.16.840.1.113883.6.96"
+      PRACTICESETTING_CODE_SCHEME:
+        value: "2.16.840.1.113883.6.96"
+      CLASS_CODE_SCHEME:
+        value: "1.2.208.184.100.9"
+      AVAILABILITYSTATUS_CODES:
+        value: "APPROVED;"
+      AVAILABILITYSTATUS_NAMES:
+        value: "Approved;"
+      FORMAT_CODE_CODES:
+        value: "urn:ad:dk:medcom:phmr:full;urn:ad:dk:medcom:qfdd:full;urn:ad:dk:medcom:qrd:full;urn:ad:dk:medcom:appointmentsummary:full;urn:ad:dk:medcom:labreports:svareksponeringsservice;"
+      FORMAT_CODE_NAMES:
+        value: "DK PHMR schema;DK QFDD schema;DK QRD schema;DK Appointment Summary Document schema;Laboratoriesvar (samling af svar);"
+      CLASS_CODE_CODES:
+        value: "001;003;004;005;"
+      CLASS_CODE_NAMES:
+        value: "Clinical report;Planning;Questionnaires;Coordination;"
+      HEALTHCAREFACILITYTYPE_CODE_CODES:
+        value: "N/A;264372000;20078004;554221000005108;554031000005103;546821000005103;547011000005103;546811000005109;550621000005101;22232009;550631000005103;550641000005106;550651000005108;394761003;550661000005105;42665001;554211000005102;550711000005101;550671000005100;554061000005105;264361005;554041000005106;554021000005101;550681000005102;550691000005104;550701000005104;554231000005106;554051000005108;"
+      HEALTHCAREFACILITYTYPE_CODE_NAMES:
+        value: "N/A;apotek;behandlingscenter for stofmisbrugere;bosted;diætistklinik;ergoterapiklinik;fysioterapiklinik;genoptræningscenter (snomed: rehabiliteringscenter);hjemmesygepleje;hospital;jordemoderklinik;kiropraktor klinik;lægelaboratorium;lægepraksis (snomed:  almen lægepraksis);lægevagt;plejehjem;præhospitals enhed (snomed:  præhospitalsenhed);psykologisk rådgivningsklinik;speciallægepraksis;statsautoriseret fodterapeut (snomed:  fodterapeutklinik);sundhedscenter;sundhedsforvaltning;sundhedspleje;tandlægepraksis;tandpleje klinik;tandteknisk klinik;vaccinationsklinik;zoneterapiklinik;"
+      PRACTICESETTING_CODE_CODES:
+        value: "N/A;408443003;394577000;394821009;394588006;394582007;394914008;394583002;394811001;394585009;408472002;394803006;394807007;419192003;394579002;408463005;394609007;551411000005104;394596001;394600006;394601005;394580004;421661004;408454008;394809005;394592004;418112009;394805004;394584008;394589003;394610002;394591006;394812008;394594003;394801008;394604002;394915009;394611003;394587001;394537008;394810000;554011000005107;394581000;394605001;394603008;408448007;394612005;"
+      PRACTICESETTING_CODE_NAMES:
+        value: "N/A;almen medicin;anæstesiologi;arbejdsmedicin;børne- og ungdomspsykiatri;dermato-venerologi;diagnostisk radiologi;endokrinologi;geriatri;gynækologi og obstetrik;hepatologi;hæmatologi;infektionsmedicin;intern medicin;kardiologi;karkirurgi;kirurgi;kirurgisk gastroenterologi;klinisk biokemi;klinisk farmakologi;klinisk fysiologi og nuklearmedicin (snomed:  klinisk fysiologi);klinisk genetik;klinisk immunologi;klinisk mikrobiologi;klinisk neurofysiologi;klinisk onkologi;lungesygdomme;medicinsk allergologi;medicinsk gastroenterologi;nefrologi;neurokirurgi;neurologi;odontologi (snomed: odontologiske specialer);oftalmologi;ortopædisk kirurgi;oto-rhino-laryngologi;patologisk anatomi og cytologi;plastikkirurgi;psykiatri;pædiatri;reumatologi;Retsmedicin;samfundsmedicin;tand-, mund- og kæbekirurgi;thoraxkirurgi;tropemedicin;urologi;"
+      OBJECT_TYPE_CODES:
+        value: "STABLE;"
+      OBJECT_TYPE_NAMES:
+        value: "Stable;"
+      TYPE_CODE_CODES:
+        value: "53576-5;74468-0;74465-6;11502-2;56446-8;81215-6;39289-4;"
+      TYPE_CODE_NAMES:
+        value: "Personal health monitoring report Document;Questionnaire Form Definition Document;Questionnaire Response Document;LABORATORY REPORT.TOTAL;Appointment Summary Document;Care plan - recommended C-CDA R2.0 & R2.1 sections;Follow-up (referred to) provider &or specialist, appointment date;"
+      map_type_class_type_codes:
+        value: "53576-5;74465-6;11502-2;81215-6;39289-4;"
+      map_type_class_class_codes:
+        value: "001;004;001;003;005;"
+      default_class_code:
+        value: "001"
+
+      # Endpoints
+      ITI_18_ENDPOINT:
+        value: "http://test1-cnsp.ekstern-test.nspop.dk:8080/ddsregistry"
+      ITI_43_ENDPOINT:
+        value: "http://test1-cnsp.ekstern-test.nspop.dk:8080/ddsrepository"
+      ITI_18_DGWS_ENABLED:
+        value: "true"
+      ITI_43_DGWS_ENABLED:
+        value: "true"
+      xds_iti57_endpoint:
+        value: "http://test1-cnsp.ekstern-test.nspop.dk:8080/ddsregistry/metadataupdate"
+      xds_iti57_dgws:
+        value: "true"
+        
+      xds_iti41_repos_repo_0_name:
+        value: "DRS"
+      xds_iti41_repos_repo_0_endpoint:
+        value: "http://test1-cnsp.ekstern-test.nspop.dk:8080/drs/proxy"
+      xds_iti41_repos_repo_0_dgwsenabled:
+        value: "true"
+      xds_iti41_repos_repo_0_repositoryuniqueid:
+        value: "1.2.208.176.43210.8.10.11"
+      xds_iti41_repos_repo_0_updateallowed:
+        value: "true"
+      xds_iti41_repos_repo_0_validdoctypes_0:
+        value: "81215-6"
+      xds_iti41_repos_repo_0_validdoctypes_1:
+        value: "53576-5"
+      xds_iti41_repos_repo_0_validdoctypes_2:
+        value: "74465-6"
+      xds_iti41_repos_repo_0_validdoctypes_3:
+        value: "11502-2"
+      xds_iti41_repos_repo_0_validdoctypes_4:
+        value: "39289-4"
+
+    extraVolumes:
+      keystore-dir: |
+        emptyDir: {}
+    extraVolumeMounts:
+      keystore-dir:
+        mountPath: /app/config/keystores
+
+  extraConfigMap:
+    voces.crt: |
+      Bag Attributes
+          localKeyID: 1D 10 16 1A EF 1A 67 13 46 84 E6 B8 02 F0 E9 BB 58 3D 4D 43
+          friendlyName: NETS DANID A/S - TU VOCES gyldig
+      subject=/C=DK/O=NETS DANID A/S // CVR:30808460/serialNumber=CVR:30808460-UID:25351738/CN=NETS DANID A/S - TU VOCES gyldig
+      issuer=/C=DK/O=TRUST2408/CN=TRUST2408 Systemtest XXII CA
+      -----BEGIN CERTIFICATE-----
+      MIIGOTCCBSGgAwIBAgIEW6065DANBgkqhkiG9w0BAQsFADBIMQswCQYDVQQGEwJE
+      SzESMBAGA1UECgwJVFJVU1QyNDA4MSUwIwYDVQQDDBxUUlVTVDI0MDggU3lzdGVt
+      dGVzdCBYWElJIENBMB4XDTE5MTIxNjEzMzkwMVoXDTIyMTIxNjEzMzgwOVowgYMx
+      CzAJBgNVBAYTAkRLMScwJQYDVQQKDB5ORVRTIERBTklEIEEvUyAvLyBDVlI6MzA4
+      MDg0NjAxSzAgBgNVBAUTGUNWUjozMDgwODQ2MC1VSUQ6MjUzNTE3MzgwJwYDVQQD
+      DCBORVRTIERBTklEIEEvUyAtIFRVIFZPQ0VTIGd5bGRpZzCCASIwDQYJKoZIhvcN
+      AQEBBQADggEPADCCAQoCggEBALDlBB8ztRVXUF0V2OE3i3Bcv5FfSjjuz6I4iz36
+      l3yk0tpKCj/UmgrofM+Xhl/uD+f14PWokcxXp5+TWUkAZQ5SAxgvtyaW5snHFBqI
+      GO+PLFUMq5ZGSlPFMkZNErXW0M31viZ06n8j1mauCyFtw1injTQw/RJzhDYS0ahu
+      8G+zympNO8n2ZjaJ7WYusSVR1mygIFBeJsUwyJ7mU0p/GUDj6kGw7apodUpjtLrW
+      2z9Y+TXk/snPqOBO1+9zW+1E58dUg6RoV/+Q/TKSQNfqRI765SRqXq5QpRNFyYih
+      5X5uZHdR8/YJFulzID1N8IuIDEqtaIMSfGVSTnQSELjGnz0CAwEAAaOCAu0wggLp
+      MA4GA1UdDwEB/wQEAwIDuDCBlwYIKwYBBQUHAQEEgYowgYcwPAYIKwYBBQUHMAGG
+      MGh0dHA6Ly9vY3NwLnN5c3RlbXRlc3QyMi50cnVzdDI0MDguY29tL3Jlc3BvbmRl
+      cjBHBggrBgEFBQcwAoY7aHR0cDovL3YuYWlhLnN5c3RlbXRlc3QyMi50cnVzdDI0
+      MDguY29tL3N5c3RlbXRlc3QyMi1jYS5jZXIwggEgBgNVHSAEggEXMIIBEzCCAQ8G
+      DSsGAQQBgfRRAgQGAwUwgf0wLwYIKwYBBQUHAgEWI2h0dHA6Ly93d3cudHJ1c3Qy
+      NDA4LmNvbS9yZXBvc2l0b3J5MIHJBggrBgEFBQcCAjCBvDAMFgVEYW5JRDADAgEB
+      GoGrRGFuSUQgdGVzdCBjZXJ0aWZpa2F0ZXIgZnJhIGRlbm5lIENBIHVkc3RlZGVz
+      IHVuZGVyIE9JRCAxLjMuNi4xLjQuMS4zMTMxMy4yLjQuNi4zLjUuIERhbklEIHRl
+      c3QgY2VydGlmaWNhdGVzIGZyb20gdGhpcyBDQSBhcmUgaXNzdWVkIHVuZGVyIE9J
+      RCAxLjMuNi4xLjQuMS4zMTMxMy4yLjQuNi4zLjUuMB4GA1UdEQQXMBWBE3R1LXN1
+      cHBvcnRAZGFuaWQuZGswga0GA1UdHwSBpTCBojA9oDugOYY3aHR0cDovL2NybC5z
+      eXN0ZW10ZXN0MjIudHJ1c3QyNDA4LmNvbS9zeXN0ZW10ZXN0MjIxLmNybDBhoF+g
+      XaRbMFkxCzAJBgNVBAYTAkRLMRIwEAYDVQQKDAlUUlVTVDI0MDgxJTAjBgNVBAMM
+      HFRSVVNUMjQwOCBTeXN0ZW10ZXN0IFhYSUkgQ0ExDzANBgNVBAMMBkNSTDIxMzAf
+      BgNVHSMEGDAWgBSrqAFEGbCzQ5na+nzM0gAYA+c8vzAdBgNVHQ4EFgQUHRAWGu8a
+      ZxNGhOa4AvDpu1g9TUMwCQYDVR0TBAIwADANBgkqhkiG9w0BAQsFAAOCAQEASVgd
+      9KxZHABgJCrb3wOasIa50udWZQb+Awo9ul8pv9OoQKxLB5Dij/Dz+yytrw59AYzc
+      AWvVO4qenzrDwIOvHXikFQdMtHIicLi5HrZGrlTydJG9DA5yL7kmPhz0h46fjev6
+      SkbhiMVAe1I8xtflzrKoVnptlR6f9bdH1zsqx/J2sB2uIUmbZ/4SNGY+ZU2DM97A
+      FT5N39PFpQIvvpt3ryTlDHGq4aw2UFiXTh95GkVsOFfFjAPVxI3SmdPkZFn+YxnV
+      uoerVDuuLKhv+u/lFHw/wwE7pBFhjXo61vwl8RuxhBQVqvLdWdQaqv4UXmShGATn
+      U5nUjL1k9nBZSJtyfw==
+      -----END CERTIFICATE-----
+    voces.key: |
+      Bag Attributes
+          localKeyID: 1D 10 16 1A EF 1A 67 13 46 84 E6 B8 02 F0 E9 BB 58 3D 4D 43
+          friendlyName: NETS DANID A/S - TU VOCES gyldig
+          Microsoft CSP Name: Microsoft Enhanced RSA and AES Cryptographic Provider
+      Key Attributes: <No Attributes>
+      -----BEGIN PRIVATE KEY-----
+      MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCw5QQfM7UVV1Bd
+      FdjhN4twXL+RX0o47s+iOIs9+pd8pNLaSgo/1JoK6HzPl4Zf7g/n9eD1qJHMV6ef
+      k1lJAGUOUgMYL7cmlubJxxQaiBjvjyxVDKuWRkpTxTJGTRK11tDN9b4mdOp/I9Zm
+      rgshbcNYp400MP0Sc4Q2EtGobvBvs8pqTTvJ9mY2ie1mLrElUdZsoCBQXibFMMie
+      5lNKfxlA4+pBsO2qaHVKY7S61ts/WPk15P7Jz6jgTtfvc1vtROfHVIOkaFf/kP0y
+      kkDX6kSO+uUkal6uUKUTRcmIoeV+bmR3UfP2CRbpcyA9TfCLiAxKrWiDEnxlUk50
+      EhC4xp89AgMBAAECggEAcVkuPPgbDqO2QQ9gu1+mH8eukO4oVzbfISluP7a1Hw9W
+      dL2At8n5MwgqAbMsTYfz9USec4sicXexVxVJ3vc7yeNPTE4246lKFP1VqnKO1+I8
+      G/tUb6R2uBrhzh5Q4OfXQEI5J9c+81z5Yy4ev7rfs40Zc9n4L7yJeUSxx2Xe9xN+
+      +RqjbLuCwY+SO0UsoNAZcEr0QDP3Dg7drFSG0gBxSj5F4YlhiH0ndv2kRM6pUMNm
+      vra9nJvqRU/H7ojxDw+wIfqRV9+RwvHUHli0ITg+h2WFKSttei33QLLc8PDnzc10
+      LYRfmxcsOdnuVDpvm86ijj6e8XNBLUiT07HwTVXMAQKBgQD8HQapztdFLcEFeKPB
+      UGddB6qn4Unn4sZnbfaOGfXA1GW2qq6FaZDaTeHCQPBBPeuxcwN1lgzm6aq81d0n
+      x1ApgzwQyPN5+vJ/5LSq/rHA6YBONnIA5q9+YurWBx1B97UwEIPL/kOE43wOEwJS
+      nPJoiIXo7fRIUloOQ0bZs8WsgQKBgQCznyL3OpzrVVA3aoEfawKHJRG6i5VK5+Ps
+      7lqK7pTC+sdg4pftE3ujycsd/+l3TD8Di4stLeYx8QUl+TYIsfeHKMGbjVwbajgn
+      WRPQPM30rsHAjLJzw8e39IJScqs/OpAtkWnqxCUpW+tXSCyA3T7m64Prmuh37sXE
+      qEqJzAREvQKBgQCUodQk1kHJkhDi1d3NAUb+7J8qvEIjCGop3gVmf12IInAYwgWD
+      t9njKdk3+arq+8NxaToX36+ZjxbOn1LzuajD4I/P4XjRaCYBSmdNDDzlW4P+GFEb
+      wOSjoVOLfMQ9+PiD7qiU4kESHj8r2P8cj1TGVf6EdYz3+j0HfZhOjpKygQKBgHZy
+      nWss4qepdaFlgUqHlX4rKrq6KzPfIQVv1JNDayP8nZe9NPRoYaMLgf8BcCJ0TCV5
+      UsjzOJZ8WqnE4iXvvcwKS0nZeQC3FdqUuiUaw7Hzv97KqS7/zub2vS3DYjvq0YLL
+      Hm5q9BqG+/VtqbM8sqsyaabnWx8jfJUHaUffGn19AoGBAO/aUU+S9i0SwaqEqcb8
+      B1EJvTWG3RyxmzoDipAsTgdc5U1FVSvTAm9Cjp/m1VEuBb68shEvcXNdFC+BW0L8
+      r4Lea6rJoEMcTtJZLInQr5iVC3rldeT2XUe8pyao2hWIVD/Nv7b2DQ1dE5Vs1aXv
+      Fk6DNLU9qDSAcl4Uu10HAUZQ
+      -----END PRIVATE KEY-----
+    moces.key: |
+      Bag Attributes
+          friendlyName: casper rasmussen
+          localKeyID: 54 69 6D 65 20 31 36 30 32 36 30 34 39 32 30 34 33 31
+      Key Attributes: <No Attributes>
+      -----BEGIN PRIVATE KEY-----
+      MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCPG30313JLWszo
+      1rD6EtKfvf3JvrECu/xnp8mXTKklDVxpp/wunRM/BEJhhxgTj4vVIw6ZPAK+XUr9
+      EKuqOoCWdGWNH5p4FYAtSCiJ9YBxPjgtR24Zqbj9K//32aHLKo+pmVW/J3BVTyGZ
+      F+sIvT3Tk04aN4YydKADIBHsqJkcOMScMIvHc7wakZ44T4NRSsrxELM8daqLiOKJ
+      1EFI++J1eIKelJNiXqlHxG1PRN9beLUdUYsbMdUk3a5BZek+iOOXl9/uugYca9xZ
+      fJH6zvEXVHUQ4vx3p6Sin/jQsAytRGEKL8QwV2QDo580/ovgTPAhsu4vJ8dLQe8J
+      mPqb3akXAgMBAAECggEAalZo02e6PBg6jwGI/CmkbKLGxHR4H6oEQhnBiDWksi2d
+      b70tfI2nUXoewU2bLF3L8BJetKqM91tnb2hFxvY1upa/JwBGzdhcKEmoJetRB9TN
+      9YdQXq1pEmbxiwAiY0869TFFMAdkR1/HfXTyZsoH+QFKVdzQUQmsJOZdq1cUfozr
+      jlq+5+uht1iPcf1KWJ0GUa6tDJZ077y+4uVJbTAdpsOJo76O+Sn1rJKt3m9jGjJl
+      w0GY0ks+s4j9Hqp14FL+VgdDcMQMAkzpOboBDgjZpuFUYpMS5btSGOJT0YSnqgg6
+      SaNFiYYrRgNLxi8Gw/IS1a3eYMSqOKmbkEWJrwbpcQKBgQDHH+UlKdx/OmxVjyG1
+      w8rSwToOWeeiobQocZDEQ4Bm+3LqozqkuR+GepH0r7NDaUzFlOq2Onyohg0+MO0y
+      VShbDNcvBSy6p4SJKInIQF9s1tfww5nqtdtAyTZu1joNFLGK7BcVITSR+0z4qO0X
+      grJOKZt0T4bESF9QvIZMSClV0wKBgQC3+5VRDF8jX+BHGhfRHg6gRFXIioPYdrTu
+      E6hdywHSrw6/wl2WWMpQHPadKdGA+va5xGWMaCgIN7JauSLC8h62sS7DOic7wfxd
+      k1HBPlIp7fADuAjgAGgkXbHD03PLeb9sdG1ofzmWzrhQbne6RELsMpuSJYIw0BVj
+      Yep/XpVBLQKBgDY81tKPm3LAPB/1862p3gYYAbNFA9YFi6f0fwUmicQDO6LzwRZ7
+      Ij4kBruKXB7BgNrUnDX0ql3Q3ayR8RnjnjFmxvoUw8E3vd8KPrVf614fCwSWksce
+      r9Duvbfk/Dzx5QY9FnB38fTNaYLVqHbd76lgpepBeyjdubCpGT+P7EpnAoGALzo2
+      hxqM5XC8CqRpDrYPfRZtis/7rjoykZacNo9hBWsIdzL2gRyDunLk300XyWsioGcI
+      xjUKaamab+1sPeyW88Chx12LKqzOEls5tkhAISFB5kJ8jLut///JHQKPi+DRwY5V
+      c2iNKOghqgvhUgApyaXoB2j3dX5Er0E4R7/IwnUCgYAz1wwFkPnHlXr67+rmHt/m
+      9/7OTTcOPeB+JxXgWUmP0FdCwA3bvTanvt+F9fSEF+wrktP/zQ8Q2U63kUHjqUI8
+      8iLpst4CCnmuwUCCkZqMEr/d8sJJ81SJ/5WV3GPJKffERYyE/GFH9kKpvqVABIGO
+      lnQgy1Gj51HnSjs20WKhNQ==
+      -----END PRIVATE KEY-----
+    moces.crt: |
+      Bag Attributes
+          friendlyName: casper rasmussen
+          localKeyID: 54 69 6D 65 20 31 36 30 32 36 30 34 39 32 30 34 33 31
+      subject=/C=DK/O=LAKESIDE A/S // CVR:25450442/CN=Casper Rasmussen/serialNumber=CVR:25450442-RID:40252666
+      issuer=/C=DK/O=TRUST2408/CN=TRUST2408 Systemtest XXII CA
+      -----BEGIN CERTIFICATE-----
+      MIIGIjCCBQqgAwIBAgIEWRzJeDANBgkqhkiG9w0BAQsFADBIMQswCQYDVQQGEwJE
+      SzESMBAGA1UECgwJVFJVU1QyNDA4MSUwIwYDVQQDDBxUUlVTVDI0MDggU3lzdGVt
+      dGVzdCBYWElJIENBMB4XDTE4MDgzMDEyMzgzNloXDTIxMDgzMDEyMzcyMlowcTEL
+      MAkGA1UEBhMCREsxJTAjBgNVBAoMHExBS0VTSURFIEEvUyAvLyBDVlI6MjU0NTA0
+      NDIxOzAXBgNVBAMMEENhc3BlciBSYXNtdXNzZW4wIAYDVQQFExlDVlI6MjU0NTA0
+      NDItUklEOjQwMjUyNjY2MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+      jxt9N9dyS1rM6Naw+hLSn739yb6xArv8Z6fJl0ypJQ1caaf8Lp0TPwRCYYcYE4+L
+      1SMOmTwCvl1K/RCrqjqAlnRljR+aeBWALUgoifWAcT44LUduGam4/Sv/99mhyyqP
+      qZlVvydwVU8hmRfrCL0905NOGjeGMnSgAyAR7KiZHDjEnDCLx3O8GpGeOE+DUUrK
+      8RCzPHWqi4jiidRBSPvidXiCnpSTYl6pR8RtT0TfW3i1HVGLGzHVJN2uQWXpPojj
+      l5ff7roGHGvcWXyR+s7xF1R1EOL8d6ekop/40LAMrURhCi/EMFdkA6OfNP6L4Ezw
+      IbLuLyfHS0HvCZj6m92pFwIDAQABo4IC6TCCAuUwDgYDVR0PAQH/BAQDAgP4MIGX
+      BggrBgEFBQcBAQSBijCBhzA8BggrBgEFBQcwAYYwaHR0cDovL29jc3Auc3lzdGVt
+      dGVzdDIyLnRydXN0MjQwOC5jb20vcmVzcG9uZGVyMEcGCCsGAQUFBzAChjtodHRw
+      Oi8vbS5haWEuc3lzdGVtdGVzdDIyLnRydXN0MjQwOC5jb20vc3lzdGVtdGVzdDIy
+      LWNhLmNlcjCCASAGA1UdIASCARcwggETMIIBDwYNKwYBBAGB9FECBAYCBTCB/TAv
+      BggrBgEFBQcCARYjaHR0cDovL3d3dy50cnVzdDI0MDguY29tL3JlcG9zaXRvcnkw
+      gckGCCsGAQUFBwICMIG8MAwWBURhbklEMAMCAQEagatEYW5JRCB0ZXN0IGNlcnRp
+      ZmlrYXRlciBmcmEgZGVubmUgQ0EgdWRzdGVkZXMgdW5kZXIgT0lEIDEuMy42LjEu
+      NC4xLjMxMzEzLjIuNC42LjIuNS4gRGFuSUQgdGVzdCBjZXJ0aWZpY2F0ZXMgZnJv
+      bSB0aGlzIENBIGFyZSBpc3N1ZWQgdW5kZXIgT0lEIDEuMy42LjEuNC4xLjMxMzEz
+      LjIuNC42LjIuNS4wGwYDVR0RBBQwEoEQYW5uaUBsYWtlc2lkZS5kazCBrAYDVR0f
+      BIGkMIGhMD2gO6A5hjdodHRwOi8vY3JsLnN5c3RlbXRlc3QyMi50cnVzdDI0MDgu
+      Y29tL3N5c3RlbXRlc3QyMjEuY3JsMGCgXqBcpFowWDELMAkGA1UEBhMCREsxEjAQ
+      BgNVBAoMCVRSVVNUMjQwODElMCMGA1UEAwwcVFJVU1QyNDA4IFN5c3RlbXRlc3Qg
+      WFhJSSBDQTEOMAwGA1UEAwwFQ1JMNzYwHwYDVR0jBBgwFoAUq6gBRBmws0OZ2vp8
+      zNIAGAPnPL8wHQYDVR0OBBYEFOtPO5BckYcR+z8toqcBaZe2XXzuMAkGA1UdEwQC
+      MAAwDQYJKoZIhvcNAQELBQADggEBAHN1kI/Iq05n41jldFdu+0DJkw7He6Li6Zur
+      six2vTiFAV/pTaCMqvSgQnEmcSrciBWktE69HRj15hr+CQUTkmsfE52Kuo0zpFgi
+      tqZXcG7eSyNiZc4GwwpLW5pk+xihD5RXmJC11Spdsw+8uISggcnUOdA5BqZINbRX
+      FwUaTAL/uJ7Ag76YiCXHzBI27RFVKg41zGa//I+cj4ZX7pxXOJA4NRVO3cnpU0W6
+      S26IJhJbX1sdfFj+72VRJIXh6971/5Fd6+DsOkbbc4KlhLDo52mTrmECBBkzVij2
+      tSDSP1KoiqZizY/FtjUCgRb7xN/VL1xfOOmNZ1d96xkPfz6laos=
+      -----END CERTIFICATE-----
+  service:
+    port: 8080
+    targetPort: container-port

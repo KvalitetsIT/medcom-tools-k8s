@@ -1,0 +1,25 @@
+service:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: cdaviewer-test1.test01.kitkube.dk
+        paths:
+          - path: /cdaviewer
+    tls:
+      - hosts:
+          - cdaviewer-test1.test01.kitkube.dk
+        secretName: cdaviewer-test1.test01.kitkube.dk
+
+  certificate:
+    cdaviewer-test1.test01.kitkube.dk:
+      namespace: testtools
+      spec:
+        secretName: cdaviewer-test1.test01.kitkube.dk
+        issuerRef:
+          name: letsencrypt-prod
+          kind: ClusterIssuer
+          group: cert-manager.io
+        dnsNames:
+          - cdaviewer-test1.test01.kitkube.dk

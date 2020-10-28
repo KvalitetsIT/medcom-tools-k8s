@@ -1,0 +1,21 @@
+service:
+  fullnameOverride: redis
+  namespace: medcomtools
+  replicaCount: 1
+
+  ingress:
+    enabled: false
+
+  image:
+    repository: redis
+    tag: "3.0.6"
+
+  serviceAccount:
+    create: false
+
+  deployment:
+    containerPort: 6379
+
+  service:
+    port: 8080
+    targetPort: container-port

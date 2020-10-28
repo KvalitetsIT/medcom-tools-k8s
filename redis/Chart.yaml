@@ -1,0 +1,7 @@
+apiVersion: v2
+name: redis
+version: 1.6.0
+dependencies:
+  - name: service
+    version: 1.6.0
+    repository: https://raw.githubusercontent.com/KvalitetsIT/helm-repo/master/

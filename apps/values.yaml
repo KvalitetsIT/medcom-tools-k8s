@@ -1,0 +1,29 @@
+argoApps:
+  server: https://kubernetes.default.svc
+  repoUrl: https://github.com/KvalitetsIT/medcom-tools-k8s
+
+  namespace: medcomtools
+  project: medcomtools
+
+  projects:
+    medcomtools:
+      description: MedCom Tools
+      sources:
+        - https://github.com/KvalitetsIT/medcom-tools-k8s
+      destinations:
+        - namespace: medcomtools
+          server: https://kubernetes.default.svc
+        - namespace: argo
+          server: https://kubernetes.default.svc          
+      ignored:
+        - Secret
+        - Role
+        - RoleBinding
+      warnignored: true
+
+  applications:
+    redis:
+      path: redis
+      targetRevision: master
+      valueFiles:
+        - values.yaml
