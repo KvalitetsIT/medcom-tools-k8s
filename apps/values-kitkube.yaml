@@ -1,9 +1,0 @@
-argoApps:
-  applications:
-        
-    cdaviewer:
-      path: cdaviewer-test1
-      targetRevision: master
-      valueFiles:
-        - values.yaml
-        - values-kitkube.yaml
