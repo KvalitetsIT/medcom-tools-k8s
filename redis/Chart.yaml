@@ -1,5 +1,5 @@
 apiVersion: v2
-name: redis
+name: redistools
 version: 1.6.0
 dependencies:
   - name: service

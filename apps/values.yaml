@@ -22,7 +22,7 @@ argoApps:
       warnignored: true
 
   applications:
-    redis:
+    redistools:
       path: redis
       targetRevision: master
       valueFiles:

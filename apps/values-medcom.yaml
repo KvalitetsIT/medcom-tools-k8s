@@ -1,7 +1,7 @@
 argoApps:
   applications:
         
-    cdaviewer:
+    cdaviewer-test1:
       path: cdaviewer-test1
       targetRevision: master
       valueFiles:
