@@ -3,7 +3,7 @@ argoApps:
         
     cdaviewer-test1:
       path: cdaviewer-test1
-      targetRevision: master
+      targetRevision: main
       valueFiles:
         - values.yaml
         - values-medcom.yaml

@@ -24,6 +24,6 @@ argoApps:
   applications:
     redistools:
       path: redis
-      targetRevision: master
+      targetRevision: main
       valueFiles:
         - values.yaml
