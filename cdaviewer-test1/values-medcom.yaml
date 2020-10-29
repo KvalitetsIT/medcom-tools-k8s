@@ -14,7 +14,7 @@ service:
 
   certificate:
     cdaviewer-test1.testtools.medcom.dk:
-      namespace: testtools
+      namespace: medcomtools
       spec:
         secretName: cdaviewer-test1.testtools.medcom.dk
         issuerRef:
