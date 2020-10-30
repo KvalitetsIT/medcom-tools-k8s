@@ -5,8 +5,8 @@ service:
 
   image:
     repository: kvalitetsit/cdadocumentviewer-webgui
-    tag: "a6f83ef7ccb90d8e29222687e798ae19cf5969dd"
-    # skal opgraderes til c5124ee5a6c9123a75b55258a5d46b900312d8ae, og samtidig fjernes voces properties, gøres efter det virker som for nsptest
+    tag: "c5124ee5a6c9123a75b55258a5d46b900312d8ae"
+
   imagePullSecrets:
     - name: kit4medcom
 
@@ -55,40 +55,8 @@ service:
     # Den gode webservice
       STS_URL:
         value: "http://test1.ekstern-test.nspop.dk:8080/sts/services/NewSecurityTokenService"
-      KEYSTORE_FILENAME:
-        value: "file:config/keystores/voces.jks"
-        #value: "file:VOCES_gyldig_2022.p12"
-      KEYSTORE_ALIAS:
-        value: "sosi:alias_system"
-        #value: "nets danid a/s - tu voces gyldig"
-      KEYSTORE_PASSWORD:
-        value: "Test1234"
-      DGWS_CERTIFICATE_CVR:
-        value: "30808460"
-      DGWS_CERTIFICATE_ORGNAME:
-        value: "NETS DANID A/S"
       DGWS_CERTIFICATE_ITSYSTEM:
         value: "TRUST2408 Systemtest XIX CA"
-
-      # HSUID header
-      HSUID_USER_TYPE:
-        value: "nsi:HealthcareProfessional"
-      HSUID_USER_CPR:
-        value: "0101584160"
-      HSUID_USER_AUTHORIZATION_CODE:
-        value: "SRTTQ"
-      HSUID_SOR_CODE:
-        value: "293591000016003"
-      HSUID_SYSTEM_OWNER:
-        value: "system owner"
-      HSUID_SYSTEM_NAME:
-        value: "MedComCDAViewer"
-      HSUID_SYSTEM_VERSION:
-        value: "1.0"
-      HSUID_ORG_NAME:
-        value: "MyOrganisation"
-      HSUID_ISSUER:
-        value: "CDA"
 
       MOCES_KEYSTORE_ALIAS:
         value: "sosi:alias_system"
