@@ -19,6 +19,8 @@ argoApps:
         - Secret
         - Role
         - RoleBinding
+        - AppProject
+        - Application
       warnignored: true
 
   applications:
