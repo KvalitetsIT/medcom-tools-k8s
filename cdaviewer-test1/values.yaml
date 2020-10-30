@@ -45,7 +45,7 @@ service:
       SPRING_REDIS_PORT:
         value: "8080"
       SPRING_REDIS_HOST:
-        value: "redis"
+        value: "redistools"
 
       SPRING_SERVLET_MULTIPART_MAX:
         value: "-1"
