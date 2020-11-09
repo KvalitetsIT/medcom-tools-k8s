@@ -12,14 +12,15 @@ service:
           - cdaviewer.medcomtools.medcom.dk
         secretName: cdaviewer.medcomtools.medcom.dk
 
-  certificate:
-    cdaviewer.medcomtools.medcom.dk:
-      namespace: medcomtools
-      spec:
-        secretName: cdaviewer.medcomtools.medcom.dk
-        issuerRef:
-          name: letsencrypt-prod
-          kind: ClusterIssuer
-          group: cert-manager.io
-        dnsNames:
-          - cdaviewer.medcomtools.medcom.dk
+# only retrieve certificate once, this is done from the cdaviewer1
+  # certificate:
+    # cdaviewer.medcomtools.medcom.dk:
+      # namespace: medcomtools
+      # spec:
+        # secretName: cdaviewer.medcomtools.medcom.dk
+        # issuerRef:
+          # name: letsencrypt-prod
+          # kind: ClusterIssuer
+          # group: cert-manager.io
+        # dnsNames:
+          # - cdaviewer.medcomtools.medcom.dk
