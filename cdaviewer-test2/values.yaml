@@ -170,7 +170,7 @@ service:
         value: "http://kih.test.xdsrepositoryb.medcom.dk:8020/axis2/services/xdsrepositoryb"
       xds_iti41_repos_repo_1_dgwsenabled:
         value: "false"
-      xds_iti41_repos_repo_0_repositoryuniqueid:
+      xds_iti41_repos_repo_1_repositoryuniqueid:
         value: "1.2.208.176.43210.8.1.29"
       xds_iti41_repos_repo_1_updateallowed:
         value: "true"
