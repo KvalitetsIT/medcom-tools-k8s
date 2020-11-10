@@ -16,9 +16,6 @@ service:
   deployment:
     containerPort: 8080
     env: 
-      JVM_OPTS:
-        value: "-Xms64m -Xmx512m"
-
       APD_SERVICE_VALIDATION_URL:
         value: "http://cda-validator-schematron-appointment:8080/validate"
       PDC_SERVICE_VALIDATION_URL:
