@@ -1,0 +1,32 @@
+service:
+  fullnameOverride: cdavalidator
+  namespace: medcomtools
+  replicaCount: 1
+
+  image:
+    repository: goimplementit/cda-validator
+    tag: "1.2.0"
+
+  imagePullSecrets:
+    - name: kit4medcom
+
+  serviceAccount:
+    create: false
+
+  deployment:
+    containerPort: 8080
+    env: 
+      JVM_OPTS:
+        value: "-Xms64m -Xmx512m"
+
+      APD_SERVICE_VALIDATION_URL:
+        value: "http://cda-validator-schematron-appointment:8080/validate"
+      PDC_SERVICE_VALIDATION_URL:
+        value: "http://cda-validator-schematron-pdc:8080/validate"
+      CPD_SERVICE_VALIDATION_URL:
+        value: "http://cda-validator-schematron-cpd:8080/validate"
+
+      
+  service:
+    port: 8080
+    targetPort: container-port

@@ -1,0 +1,25 @@
+service:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: cda.medcomtools.medcom.dk
+        paths:
+          - path: /cdavalidator
+    tls:
+      - hosts:
+          - cda.medcomtools.medcom.dk
+        secretName: cda.medcomtools.medcom.dk
+
+  certificate:
+    cda.medcomtools.medcom.dk:
+      namespace: medcomtools
+      spec:
+        secretName: cda.medcomtools.medcom.dk
+        issuerRef:
+          name: letsencrypt-prod
+          kind: ClusterIssuer
+          group: cert-manager.io
+        dnsNames:
+          - cda.medcomtools.medcom.dk

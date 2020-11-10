@@ -13,3 +13,9 @@ argoApps:
       valueFiles:
         - values.yaml
         - values-medcom.yaml
+    cdavalidator:
+      path: cdavalidator
+      targetRevision: main
+      valueFiles:
+        - values.yaml
+        - values-medcom.yaml
