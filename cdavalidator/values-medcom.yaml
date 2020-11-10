@@ -6,8 +6,7 @@ service:
     hosts:
       - host: cda.medcomtools.medcom.dk
         paths:
-          - path: /cdavalidator
-          - path: /service
+          - path: /
     tls:
       - hosts:
           - cda.medcomtools.medcom.dk
