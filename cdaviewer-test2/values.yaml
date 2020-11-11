@@ -33,6 +33,17 @@ service:
           mountPath: /output
   deployment:
     containerPort: 8080
+
+    readinessProbe:
+      httpGet:
+        path: /cdaviewer-test2/about
+        port: 8080
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      successThreshold: 1
+      timeoutSeconds: 1
+      failureThreshold: 10
+
     env: 
       JVM_OPTS:
         value: "-Xms64m -Xmx512m"
