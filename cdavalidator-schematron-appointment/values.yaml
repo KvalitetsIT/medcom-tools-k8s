@@ -22,12 +22,14 @@ service:
   #          configMapMountPath: /schematron
    #         configMapMountSubPath: ssi.key
 
-      extraVolumeMounts:
-        schematron-resources-dir:
-          mountPath: /schematron/art-decor
+#      extraVolumeMounts:
+#        schematron-resources-dir:
+#          mountPath: /schematron/art-decor
 #          mountPath: /output
 
-
+      volumeMounts:
+          - name: schematron-resources-dir
+            mountPath: /schematron/art-decor
   image:
     repository: goimplementit/cda-validator-schematron
     tag: "1.2.0"
