@@ -19,11 +19,11 @@ service:
       JAVA_OPTS:
         value: "-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m"
       APD_SERVICE_VALIDATION_URL:
-        value: "http://cda-validator-schematron-appointment:8080/validate"
+        value: "http://cdavalidator-schematron-appointment:8080/validate"
       PDC_SERVICE_VALIDATION_URL:
-        value: "http://cda-validator-schematron-pdc:8080/validate"
+        value: "http://cdavalidator-schematron-pdc:8080/validate"
       CPD_SERVICE_VALIDATION_URL:
-        value: "http://cda-validator-schematron-cpd:8080/validate"
+        value: "http://cdavalidator-schematron-cpd:8080/validate"
 
     configMapMountPaths:
       server.xml:
