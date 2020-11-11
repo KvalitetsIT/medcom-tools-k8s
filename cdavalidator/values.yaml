@@ -25,6 +25,16 @@ service:
       CPD_SERVICE_VALIDATION_URL:
         value: "http://cdavalidator-schematron-cpd:8080/validate"
 
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 8080
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      successThreshold: 1
+      timeoutSeconds: 1
+      failureThreshold: 10
+
     configMapMountPaths:
       server.xml:
         configMapMountPath: /usr/local/tomcat/conf/server.xml
