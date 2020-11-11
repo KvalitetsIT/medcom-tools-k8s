@@ -15,8 +15,8 @@ service:
 
       commands:
           - ash
-          - c
-          - "cp -R /schematron /output/schematron"
+          - -c
+          - "cp -R /schematron/art-decor /output"
 #      configMapMountPaths:
  #       schematron:
   #          configMapMountPath: /schematron
