@@ -19,3 +19,8 @@ argoApps:
       valueFiles:
         - values.yaml
         - values-medcom.yaml
+    cdavalidator-schematron-appointment:
+      path: cdavalidator-schematron-appointment
+      targetRevision: main
+      valueFiles:
+        - values.yaml

@@ -1,0 +1,58 @@
+service:
+  fullnameOverride: cdavalidator
+  namespace: medcomtools
+  replicaCount: 1
+
+  ingress:
+    enabled: false
+
+  initContainers:
+    schematron-resources-builder:
+      image:
+        repository: "kvalitetsit/medcom-cda-validator-schematron-resources"
+        tag: "ca4d3eb60c63a1bc9dc5927dc140300c0ebb1494"
+        # tag skal laves om til samme version som shematron image
+
+#      commands:
+#          - ash
+#          - c
+#         - "mkdir out;cp -R /schematron /output/schematron"
+#      configMapMountPaths:
+ #       schematron:
+  #          configMapMountPath: /schematron
+   #         configMapMountSubPath: ssi.key
+
+      extraVolumeMounts:
+        schematron-resources-dir:
+          mountPath: /schematron/art-decor
+#          mountPath: /output
+
+
+  image:
+    repository: goimplementit/cda-validator-schematron
+    tag: "1.2.0"
+
+  imagePullSecrets:
+    - name: kit4medcom
+
+  serviceAccount:
+    create: false
+
+  deployment:
+    containerPort: 8080
+    env: 
+      JAVA_OPTS:
+        value: "-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m"
+      profiles:
+        value: "file:/resources/medcom-documents-appointment_s_r.xslt"
+
+    extraVolumes:
+      schematron-resources-dir: |
+        emptyDir: {}
+    extraVolumeMounts:
+      schematron-resources-dir:
+        mountPath: /resources
+
+  service:
+    port: 8080
+    targetPort: container-port
