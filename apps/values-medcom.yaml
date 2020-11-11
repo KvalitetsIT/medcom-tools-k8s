@@ -24,3 +24,13 @@ argoApps:
       targetRevision: main
       valueFiles:
         - values.yaml
+    cdavalidator-schematron-pdc:
+      path: cdavalidator-schematron-pdc
+      targetRevision: main
+      valueFiles:
+        - values.yaml
+    cdavalidator-schematron-cpd:
+      path: cdavalidator-schematron-cpd
+      targetRevision: main
+      valueFiles:
+        - values.yaml
