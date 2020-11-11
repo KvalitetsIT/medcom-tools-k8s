@@ -10,8 +10,7 @@ service:
     schematron-resources-builder:
       image:
         repository: "kvalitetsit/medcom-cda-validator-schematron-resources"
-        tag: "ca4d3eb60c63a1bc9dc5927dc140300c0ebb1494"
-        # tag skal laves om til samme version som shematron image
+        tag: "1.2.0"
 
       commands:
           - ash
