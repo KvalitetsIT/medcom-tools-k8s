@@ -31,11 +31,11 @@ service:
   serviceAccount:
     create: false
 
-  resources:
-    limits:
-      memory: "4096Mi"
-    requests:
-      memory: "512Mi"
+#  resources:
+#    limits:
+#      memory: "4096Mi"
+#    requests:
+#      memory: "512Mi"
 
   deployment:
     containerPort: 8080
