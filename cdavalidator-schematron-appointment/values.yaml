@@ -13,23 +13,23 @@ service:
         tag: "ca4d3eb60c63a1bc9dc5927dc140300c0ebb1494"
         # tag skal laves om til samme version som shematron image
 
-#      commands:
-#          - ash
-#          - c
-#         - "mkdir out;cp -R /schematron /output/schematron"
+      commands:
+          - ash
+          - c
+          - "cp -R /schematron /output/schematron"
 #      configMapMountPaths:
  #       schematron:
   #          configMapMountPath: /schematron
    #         configMapMountSubPath: ssi.key
 
-#      extraVolumeMounts:
-#        schematron-resources-dir:
+      extraVolumeMounts:
+        schematron-resources-dir:
 #          mountPath: /schematron/art-decor
-#          mountPath: /output
+          mountPath: /output
 
-      volumeMounts:
-          - name: schematron-resources-dir
-            mountPath: /schematron/art-decor
+#      volumeMounts:
+#          - name: schematron-resources-dir
+#            mountPath: /schematron/art-decor
   image:
     repository: goimplementit/cda-validator-schematron
     tag: "1.2.0"
