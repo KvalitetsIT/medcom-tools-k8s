@@ -71,3 +71,23 @@ Under punkt 2 "Installer rettelsen" udføres følgende som trin ii:
  - Tryk refresh
  - Den ændrede applikation vil være "gul". 
  - Tryk Sync (Bekræft igen i vindue ved at vælge "Syncronize")
+
+## cdavalidator-schematron
+
+Applikationenerne: 
+
+ - cdavalidator-schematron-appointment
+ - cdavalidator-schematron-cpd
+ - cdavalidator-schematron-pdc
+
+der er en del af cda validatoren, gør brug af en række filer (af typerne sch, xslt og xml). Disse mange filer bliver i dette deployment projekt stillet til rådighed vha en init container, der startes op inden applikationen selv startes op.
+Disse filer kommer oprindelig fra cda validator installationen (https://bitbucket.org/4s/cda-validator/downloads/install.zip). Det er filerne som findes i biblioteket "installation/art-decor/". De vedligeholdes som en del af cda validatoren (https://bitbucket.org/4s/cda-validator/src/master/).
+
+Når disse filer ændres, skal der laves en ny version af det docker image, som anvendes af init containeren og dette skal deployes. 
+
+Fremgangsmåden er som følger
+
+ 1. Lav ændringerne som Medcom processen er for det (Cda-validator source og installation.zip)
+ 2. Lav nyt docker image med art-decor filerne:
+ 3. Opdater source filerne med det nye docker image:
+ 4. Deploy rettelsen:
