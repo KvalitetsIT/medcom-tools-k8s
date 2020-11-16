@@ -89,5 +89,9 @@ Fremgangsmåden er som følger
 
  1. Lav ændringerne som Medcom processen er for det (Cda-validator source og installation.zip)
  2. Lav nyt docker image med art-decor filerne:
+    - opdater github projektet [cda-validator-schematron-resources](https://github.com/medcomdk/cda-validator-schematron-resources) med de ændrede filer
+    - tag sourcen med korrekt version (samme version som cda validatoren eller under-version)
+    - herefter oprettes automatisk version af docker image [kvalitetsit/medcom-cda-validator-schematron-resources](https://hub.docker.com/repository/docker/kvalitetsit/medcom-cda-validator-schematron-resources)
+    - anvendes git tag v1.2.0, git push origin v1.2.0, vil kvalitetsit/medcom-cda-validator-schematron-resources:1.2.0 kunne findes
  3. Opdater source filerne med det nye docker image:
  4. Deploy rettelsen:
