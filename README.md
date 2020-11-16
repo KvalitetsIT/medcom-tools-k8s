@@ -20,6 +20,7 @@ Projektet indeholder følgende applikationer
  
 ## Vedligehold og deployment
 **Generelt**
+
 For at lave justeringer til tools-application projektet på medcoms test miljø udføres følgende trin
 
  1. Ret source 
@@ -34,3 +35,38 @@ For at lave justeringer til tools-application projektet på medcoms test miljø 
        - Indtast brugernavn og password (skift password, hvis du bliver bedt om det)
     2. Deploy rettelsen (se nedenfor)
   
+**Ny applikation**
+
+Følg oventående generelle vejledning. 
+
+Under punkt 1 "Ret source" udføres følgende som trin ii:
+
+ - Lav nyt bibliotek med relevante filer 
+   - (eks bibliotek cdaviewer-test1 med filerne Chart.yaml, values.yaml og values-medcom.yaml)
+ - Tilføj den nye applikation i Apps (hoved applikationen) 
+   - (i values.yaml eller values-medcom.yaml)
+
+Under punkt 2 "Installer rettelsen" udføres følgende som trin ii:
+
+ - Klik på "Tools application" for at åbne den
+ - Tryk refresh
+ - Den nye applikation vil være "gul". 
+ - Tryk på de 3 prikker på den nye gule og vælg Sync (Bekræft i vinduet ved at vælge "Syncronize"
+ - For den nye applikation klik på "open application" (vindue ikon med pil ud til højre)
+ - Tryk refresh
+ - Tryk Sync (Bekræft igen i vindue ved at vælge "Syncronize")
+
+**Ret applikation**
+
+Følg oventående generelle vejledning. 
+
+Under punkt 1 "Ret source" udføres følgende som trin ii:
+
+ - Lav den ønskede ændring
+
+Under punkt 2 "Installer rettelsen" udføres følgende som trin ii:
+
+ - Klik på den ændrede applikation for at åbne den
+ - Tryk refresh
+ - Den ændrede applikation vil være "gul". 
+ - Tryk Sync (Bekræft igen i vindue ved at vælge "Syncronize")
