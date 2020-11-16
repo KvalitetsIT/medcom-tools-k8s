@@ -1,9 +1,10 @@
 # medcom-tools-k8s
 ## Projektets indhold
-Dette er et deployment projekt, som indeholder filer til anvendelse af Argo. Der deployes til Medcoms test miljø.
+Dette er et deployment projekt, som indeholder filer til anvendelse af Argo. Der deployes til Medcoms test miljø under projektet "tools-applications".
+
 Overordnet er følgende service tilgængelige via dette projekt
- 1. Medcom Cda viewer test 1 og 2
- 2. Medom Cda validator
+ - Medcom Cda Viewer test 1 og 2
+ - Medcom Cda Validator
 
 Projektet indeholder følgende applikationer
  1. Tools application (Apps): hoved applikation, som indeholder information om, hvilke andre applikationer der findes
@@ -19,15 +20,15 @@ Projektet indeholder følgende applikationer
  8. redistools - redis anvendes af cda viewerene til logning
  
 ## Vedligehold og deployment
-**Generelt**
+**Generelt:**
 
 For at lave justeringer til tools-application projektet på medcoms test miljø udføres følgende trin
 
- 1. Ret source 
-    1. Check source ud fra github
+ 1. Ret source:
+    1. Check source ud fra github (https://github.com/KvalitetsIT/medcom-tools-k8s)
     2. Udfør ændringen (se nedenfor)
     3. Push source til github
- 2. Installer rettelsen
+ 2. Installer rettelsen:
     1. Login i argo
        - I en browser brug linket kube-argo.vconf-test.dk
        - Vælg "login via keycloak" til højre på siden
@@ -35,7 +36,7 @@ For at lave justeringer til tools-application projektet på medcoms test miljø 
        - Indtast brugernavn og password (skift password, hvis du bliver bedt om det)
     2. Deploy rettelsen (se nedenfor)
   
-**Ny applikation**
+**Ny applikation:**
 
 Følg oventående generelle vejledning. 
 
@@ -56,7 +57,7 @@ Under punkt 2 "Installer rettelsen" udføres følgende som trin ii:
  - Tryk refresh
  - Tryk Sync (Bekræft igen i vindue ved at vælge "Syncronize")
 
-**Ret applikation**
+**Ret applikation:**
 
 Følg oventående generelle vejledning. 
 
