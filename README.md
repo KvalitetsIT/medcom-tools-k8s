@@ -1,13 +1,13 @@
 # medcom-tools-k8s
 ## Projektets indhold
-Dette er et deployment projekt, som indeholder filer til anvendelse af Argo. Der deployes til Medcoms test miljø under projektet "tools-applications".
+Dette er et deployment projekt, som indeholder filer til anvendelse af Argo. Der deployes til Medcoms [test miljø](https://kube-argo.vconf-test.dk) under projektet "tools-applications".
 
 Overordnet er følgende service tilgængelige via dette projekt
  - Medcom Cda Viewer test 1 og 2
  - Medcom Cda Validator
 
 Projektet indeholder følgende applikationer
- 1. Tools application (Apps): hoved applikation, som indeholder information om, hvilke andre applikationer der findes
+ 1. tools application (Apps): hoved applikation, som indeholder information om, hvilke andre applikationer, der findes
  2. cdaviewer-test1: Medcoms cda viewer, som behandler dokumenter på test 1
 	- Se https://cdaviewer.medcomtools.medcom.dk/cdaviewer-test1/
  3. cdaviewer-test2: Medcoms cda viewer, som behandler dokumenter på test 2 og kih
@@ -30,7 +30,7 @@ For at lave justeringer til tools-application projektet på medcoms test miljø 
     3. Push source til github
  2. Installer rettelsen:
     1. Login i argo
-       - I en browser brug linket kube-argo.vconf-test.dk
+       - I en browser brug linket https://kube-argo.vconf-test.dk
        - Vælg "login via keycloak" til højre på siden
        - Vælg "External deployment" til højre i login ruden
        - Indtast brugernavn og password (skift password, hvis du bliver bedt om det)
@@ -38,7 +38,7 @@ For at lave justeringer til tools-application projektet på medcoms test miljø 
   
 **Ny applikation:**
 
-Følg oventående generelle vejledning. 
+Følg ovenstående generelle vejledning. 
 
 Under punkt 1 "Ret source" udføres følgende som trin ii:
 
@@ -74,13 +74,14 @@ Under punkt 2 "Installer rettelsen" udføres følgende som trin ii:
 
 ## cdavalidator-schematron
 
-Applikationenerne: 
+Følgende applikationerne er en del af cda validatoren: 
 
  - cdavalidator-schematron-appointment
  - cdavalidator-schematron-cpd
  - cdavalidator-schematron-pdc
 
-der er en del af cda validatoren, gør brug af en række filer (af typerne sch, xslt og xml). Disse mange filer bliver i dette deployment projekt stillet til rådighed vha en init container, der startes op inden applikationen selv startes op.
+De gør brug af en række filer (af typerne sch, xslt og xml). Disse mange filer bliver i dette deployment projekt stillet til rådighed vha en init container, der startes op inden applikationen selv startes op.
+
 Disse filer kommer oprindelig fra cda validator installationen (https://bitbucket.org/4s/cda-validator/downloads/install.zip). Det er filerne som findes i biblioteket "installation/art-decor/". De vedligeholdes som en del af cda validatoren (https://bitbucket.org/4s/cda-validator/src/master/).
 
 Når disse filer ændres, skal der laves en ny version af det docker image, som anvendes af init containeren og dette skal deployes. 
