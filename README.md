@@ -86,13 +86,16 @@ Disse filer kommer oprindelig fra cda validator installationen (https://bitbucke
 
 Når disse filer ændres, skal der laves en ny version af det docker image, som anvendes af init containeren og dette skal deployes. 
 
-Fremgangsmåden er som følger
+Fremgangsmåden for dette er som følger
 
- 1. Lav ændringerne som Medcom processen er for det (Cda-validator source og installation.zip)
+ 1. Lav ændringerne for cda validatoren, som det nu gøres (Cda-validator source og installation.zip)
  2. Lav nyt docker image med art-decor filerne:
     - opdater github projektet [cda-validator-schematron-resources](https://github.com/medcomdk/cda-validator-schematron-resources) med de ændrede filer
-    - tag sourcen med korrekt version (samme version som cda validatoren eller under-version)
+    - "tag" sourcen med korrekt version (samme version som cda validatoren eller under-version)
     - herefter oprettes automatisk version af docker image [kvalitetsit/medcom-cda-validator-schematron-resources](https://hub.docker.com/repository/docker/kvalitetsit/medcom-cda-validator-schematron-resources)
-    - anvendes git tag v1.2.0, git push origin v1.2.0, vil kvalitetsit/medcom-cda-validator-schematron-resources:1.2.0 kunne findes
+    - anvendes git tag v1.2.0, git push origin v1.2.0, vil docker image kvalitetsit/medcom-cda-validator-schematron-resources:1.2.0 kunne findes på docker hub
  3. Opdater source filerne med det nye docker image:
+    - følg vejledning for "ret applikation"
+    - den ønskede ændring er her, at init containerens docker image skal opdateres:
+      - for hver af de 3 schematron applikationer rettes values filen
  4. Deploy rettelsen:
