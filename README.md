@@ -19,6 +19,8 @@ Projektet indeholder følgende applikationer
  7. cdavalidator-schematron-pdc - hjælpe applikation til cda validator
  8. redistools - redis anvendes af cda viewerene til logning
  
+![alt text](/screenshots/argooversigt.png)
+
 ## Vedligehold og deployment
 **Generelt:**
 
@@ -52,8 +54,8 @@ Under punkt 2 "Installer rettelsen" udføres følgende som trin ii:
  - Klik på "Tools application" for at åbne den
  - Tryk refresh
  - Den nye applikation vil være "gul". 
- - Tryk på de 3 prikker på den nye gule og vælg Sync (Bekræft i vinduet ved at vælge "Syncronize"
- - For den nye applikation klik på "open application" (vindue ikon med pil ud til højre)
+ - Tryk på de 3 prikker på den nye gule og vælg Sync (Bekræft i vinduet ved at vælge "Syncronize")
+ - For den nye applikation klik på "open application" (mini "vindue ikon" med pil ud til højre)
  - Tryk refresh
  - Tryk Sync (Bekræft igen i vindue ved at vælge "Syncronize")
 
@@ -95,7 +97,11 @@ Fremgangsmåden for dette er som følger
     - herefter oprettes automatisk version af docker image [kvalitetsit/medcom-cda-validator-schematron-resources](https://hub.docker.com/repository/docker/kvalitetsit/medcom-cda-validator-schematron-resources)
     - anvendes git tag v1.2.0, git push origin v1.2.0, vil docker image kvalitetsit/medcom-cda-validator-schematron-resources:1.2.0 kunne findes på docker hub
  3. Opdater source filerne med det nye docker image:
-    - følg vejledning for "ret applikation"
-    - den ønskede ændring er her, at init containerens docker image skal opdateres:
+    - følg vejledning for "Vedligehold og deployment" og "ret applikation"
+    - den "ønskede ændring" er, opdatering af at init containerens docker image tag:
       - for hver af de 3 schematron applikationer rettes "values.yaml" filens tag værdi ![alt text](/screenshots/initcontainerschematronvaluesyaml.png)
  4. Deploy rettelsen:
+    - følg vejledning for "Vedligehold og deployment" og "ret applikation"
+      - den "ønskede applikation" vil være cdavalidator-schematron-appointment, cdavalidator-schematron-cpd henholdsvis cdavalidator-schematron-pdc
+      - hvor hver af disse vælges "refresh" og "sync" i sin tur ![alt text](/screenshots/argorefreshandsync.png.png)
+
