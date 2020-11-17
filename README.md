@@ -103,5 +103,5 @@ Fremgangsmåden for dette er som følger
  4. Deploy rettelsen:
     - følg vejledning for "Vedligehold og deployment" og "ret applikation"
       - den "ønskede applikation" vil være cdavalidator-schematron-appointment, cdavalidator-schematron-cpd henholdsvis cdavalidator-schematron-pdc
-      - hvor hver af disse vælges "refresh" og "sync" i sin tur ![alt text](/screenshots/argorefreshandsync.png)
+      - for hver af disse vælges "refresh" og "sync" i sin tur ![alt text](/screenshots/argorefreshandsync.png)
 
