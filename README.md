@@ -97,5 +97,5 @@ Fremgangsmåden for dette er som følger
  3. Opdater source filerne med det nye docker image:
     - følg vejledning for "ret applikation"
     - den ønskede ændring er her, at init containerens docker image skal opdateres:
-      - for hver af de 3 schematron applikationer rettes values filen
+      - for hver af de 3 schematron applikationer rettes "values.yaml" filens tag værdi ![alt text](/screenshots/initcontainerschematronvaluesyaml.png)
  4. Deploy rettelsen:
