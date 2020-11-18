@@ -21,6 +21,8 @@ Projektet indeholder følgende applikationer
  
 ![alt text](/screenshots/argooversigt.png)
 
+For at logge på, se nedenfor under "Vedligehold og deployment" >> "Generelt" >> "Installer rettelsen" >> "Login i Argo".
+
 ## Vedligehold og deployment
 **Generelt:**
 
@@ -31,7 +33,7 @@ For at lave justeringer til tools-application projektet på medcoms test miljø 
     2. Udfør ændringen (se nedenfor)
     3. Push source til github
  2. Installer rettelsen:
-    1. Login i argo
+    1. Login i Argo
        - I en browser brug linket https://kube-argo.vconf-test.dk
        - Vælg "login via keycloak" til højre på siden
        - Vælg "External deployment" til højre i login ruden
