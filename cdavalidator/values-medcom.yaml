@@ -13,7 +13,7 @@ service:
         secretName: cda.medcom.dk
 
   certificate:
-    cda.medcomtools.medcom.dk:
+    cda.medcom.dk:
       namespace: medcomtools
       spec:
         secretName: cda.medcom.dk
