@@ -1,6 +1,6 @@
 argoApps:
   server: https://kubernetes.default.svc
-  repoUrl: https://github.com/KvalitetsIT/medcom-tools-k8s
+  repoUrl: git@github.com:KvalitetsIT/medcom-tools-k8s.git
 
   namespace: medcomtools
   project: medcomtools
@@ -9,7 +9,7 @@ argoApps:
     medcomtools:
       description: MedCom Tools
       sources:
-        - https://github.com/KvalitetsIT/medcom-tools-k8s
+        - git@github.com:KvalitetsIT/medcom-tools-k8s.git
       destinations:
         - namespace: medcomtools
           server: https://kubernetes.default.svc
