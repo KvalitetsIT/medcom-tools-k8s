@@ -45,6 +45,8 @@ service:
       failureThreshold: 10
 
     env: 
+      LOG4J_FORMAT_MSG_NO_LOOKUPS:
+        value: "true"
       JVM_OPTS:
         value: "-Xms64m -Xmx512m"
       SPRING_REDIS_PORT:
